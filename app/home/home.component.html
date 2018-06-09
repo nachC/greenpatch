@@ -1,0 +1,16 @@
+<ActionBar title="My Green Patch" class="action-bar">
+</ActionBar>
+
+<StackLayout>
+  <!-- <SearchBar id="searchBar" hint="Search plant" submit="onSubmit"></SearchBar> -->
+  <GridLayout rows="*, 75">
+    <ListView row="0" [items]="plants" class="list-group">
+      <ng-template let-plant="item">
+        <Label [text]="plant.name" class="list-group-item"></Label>
+      </ng-template>
+    </ListView>
+    <StackLayout row="1">
+        <Button class="btn btn-primary btn-active" text="Add new plant" [nsRouterLink]="['/add-plant']"></Button>
+    </StackLayout>
+  </GridLayout>>
+</StackLayout>
