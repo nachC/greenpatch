@@ -2,20 +2,21 @@
   </ActionBar>
 
 <StackLayout>
-  <GridLayout rows="auto, *, auto">
-    <Image row="0" stretch="aspectFill" src="res://imgph"></Image>
-    <GridLayout row="1" rows="auto, auto, auto, auto, auto" columns="*, *">
-      <Label row="0" col="0" text="Planted"></Label>
-      <Label row="0" col="1" text="date planted"></Label>
-      <Label row="1" col="0" text="Planted"></Label>
-      <Label row="1" col="1" text="date planted"></Label>
-      <Label row="2" col="0" text="Planted"></Label>
-      <Label row="2" col="1" text="date planted"></Label>
-      <Label row="3" col="0" text="Planted"></Label>
-      <Label row="3" col="1" text="date planted"></Label>
-      <Label row="4" col="0" text="Planted"></Label>
-      <Label row="4" col="1" text="date planted"></Label>
-    </GridLayout>
-    <Image row="2" stretch="aspectFill" src="res://imgph"></Image>
+  <GridLayout rows="auto, auto, auto, *, 75" columns="auto, *" [formGroup]="plantProfileData">
+    <Label row="0" col="0" text="Name" verticalAlignment="center" class="m-20"></Label>
+    <TextField row="0" col="1" hint="Enter plant's name" class="input input-border" (textChange)="onNameChange($event)" formControlName="name"></TextField>
+    <Label row="1" col="0" text="Date planted" verticalAlignment="center" class="m-20"></Label>
+    <TextField row="1" col="1" hint="When did you plant it?" class="input input-border" (tap)="createModalView('planted')" (textChange)="onDatePlantedChange($event)" formControlName="datePlanted"></TextField>
+    <Label row="2" col="0" text="Date of harvest" verticalAlignment="center" class="m-20"></Label>
+    <TextField row="2" col="1" hint="When do you expect to harvest?" class="input input-border" (tap)="createModalView('harvest')" (textChange)="onDateHarvestChange($event)" formControlName="dateHarvest"></TextField>
+    <StackLayout row="3" col="0" colSpan="2" class="imagePreview m-10">
+        <Label horizontalAlignment="center" text="ADD A PICTURE OF YOUR PLANT!" fontSize="22" backgroundColor="#ccc" class="m-5"></Label>
+        <StackLayout orientation="horizontal" horizontalAlignment="center" class="m-5">
+          <Button class="btn btn-primary btn-active" text="Take picture"></Button>
+          <Button class="btn btn-primary btn-active" text="Upload picture"></Button>
+        </StackLayout>
+        <Image stretch="aspectFill" src="res://imgph"></Image>
+    </StackLayout>
+    <Button row="4" col="0" colSpan="2" class="btn btn-primary btn-active" text="Submit" (tap)="onSubmit()"></Button>
   </GridLayout>
 </StackLayout>

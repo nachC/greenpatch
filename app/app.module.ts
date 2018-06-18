@@ -2,9 +2,13 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
+import { NativeScriptFormsModule } from 'nativescript-angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { HomeComponent } from "./home/home.component";
 import { AddPlantComponent } from "./add-plant/add-plant.component";
+import { PlantProfileComponent } from "./plant-profile/plant-profile.component";
+import { DatePickerModalComponent } from "./date-picker-modal/date-picker-modal.component";
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -18,15 +22,21 @@ import { AddPlantComponent } from "./add-plant/add-plant.component";
     ],
     imports: [
         NativeScriptModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NativeScriptFormsModule,
+        ReactiveFormsModule
     ],
     declarations: [
         AppComponent,
         HomeComponent,
-        AddPlantComponent
+        AddPlantComponent,
+        PlantProfileComponent,
+        DatePickerModalComponent
     ],
-    providers: [
+    entryComponents: [
+        DatePickerModalComponent
     ],
+    providers: [],
     schemas: [
         NO_ERRORS_SCHEMA
     ]

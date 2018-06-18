@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
         datePlanted: '',
         dateHarvest: '',
         lastWaterDate: '',
-        notes: '',
+        notes: ''
       },
       {
         id: 1,
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
         datePlanted: '',
         dateHarvest: '',
         lastWaterDate: '',
-        notes: '',
+        notes: ''
       }
     );
    }
