@@ -3,6 +3,8 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { TextField } from 'ui/text-field';
 import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
 import { DatePickerModalComponent } from '~/date-picker-modal/date-picker-modal.component';
+import { CouchbaseService } from "../services/couchbase.service";
+import {RouterExtensions} from "nativescript-angular/router";
 
 @Component({
   moduleId: module.id,
@@ -13,7 +15,7 @@ import { DatePickerModalComponent } from '~/date-picker-modal/date-picker-modal.
 export class AddPlantComponent implements OnInit {
 
   plantProfileData: FormGroup;
-  submittedPlantProfileData = {id: '',
+  submittedPlantProfileData = {
                                 name: '',
                                 frontpageImage: '',
                                 imageGalery: [],
@@ -22,13 +24,17 @@ export class AddPlantComponent implements OnInit {
                                 lastWaterDate: '',
                                 notes: ''
                               };
+  
+  documentId: string = 'plants';
+  formSubmissions = [];
 
   constructor(private fb: FormBuilder,
               private modalService: ModalDialogService,
-              private vcRef: ViewContainerRef) {
+              private vcRef: ViewContainerRef,
+              private couchbaseService: CouchbaseService,
+              private routerExtensions: RouterExtensions) {
 
     this.plantProfileData = this.fb.group({
-        id: '',
         name: ['', Validators.required],
         frontpageImage: '',
         imageGalery: [],
@@ -37,6 +43,16 @@ export class AddPlantComponent implements OnInit {
         lastWaterDate: '',
         notes: ''
     });
+
+    let doc = this.couchbaseService.getDocument(this.documentId);
+    if(doc == null) {
+      this.couchbaseService.createDocument({"plants" : []}, this.documentId);
+    }
+    else {
+      this.formSubmissions = doc.plants;
+    }
+    console.log("doc in constructor:")
+    console.log(doc);
 
    }
 
@@ -77,7 +93,15 @@ export class AddPlantComponent implements OnInit {
     this.submittedPlantProfileData.name = this.plantProfileData.value.name;
     this.submittedPlantProfileData.datePlanted = this.plantProfileData.value.datePlanted;
     this.submittedPlantProfileData.dateHarvest = this.plantProfileData.value.dateHarvest;
-    console.log(this.submittedPlantProfileData);
+
+    this.formSubmissions.push(this.submittedPlantProfileData);
+    this.couchbaseService.updateDocument(this.documentId, {"plants" : this.formSubmissions});
+    console.log("formSubmissions:");
+    console.log(this.formSubmissions);
+    let doc = this.couchbaseService.getDocument(this.documentId);
+    console.log("doc onSubimit:");
+    console.log(doc);
+    this.routerExtensions.navigate(["/home"], { clearHistory: true});
   }
 
 }

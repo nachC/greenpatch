@@ -4,12 +4,14 @@ import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
 import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TNSFontIconModule } from 'nativescript-ngx-fonticon';
 
 import { HomeComponent } from "./home/home.component";
 import { AddPlantComponent } from "./add-plant/add-plant.component";
 import { PlantProfileComponent } from "./plant-profile/plant-profile.component";
 import { DatePickerModalComponent } from "./date-picker-modal/date-picker-modal.component";
 
+import { CouchbaseService } from "./services/couchbase.service";
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
@@ -24,6 +26,9 @@ import { DatePickerModalComponent } from "./date-picker-modal/date-picker-modal.
         NativeScriptModule,
         AppRoutingModule,
         NativeScriptFormsModule,
+        TNSFontIconModule.forRoot({
+            'fa': './fonts/font-awesome.min.css'
+        }),
         ReactiveFormsModule
     ],
     declarations: [
@@ -36,7 +41,7 @@ import { DatePickerModalComponent } from "./date-picker-modal/date-picker-modal.
     entryComponents: [
         DatePickerModalComponent
     ],
-    providers: [],
+    providers: [CouchbaseService],
     schemas: [
         NO_ERRORS_SCHEMA
     ]

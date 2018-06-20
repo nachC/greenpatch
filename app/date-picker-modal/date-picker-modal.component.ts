@@ -21,7 +21,7 @@ export class DatePickerModalComponent implements OnInit {
     let currentdate: Date = new Date();
 
     this.datePicker.minDate = new Date(currentdate.getFullYear()-5, 0, 1);
-    this.datePicker.maxDate = new Date(2045, 12, 31); 
+    this.datePicker.maxDate = new Date(2045, 11, 31); 
   }
 
   onDayChanged(args) {

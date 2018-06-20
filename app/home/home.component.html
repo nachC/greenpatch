@@ -1,4 +1,4 @@
-<ActionBar title="My Green Patch" class="action-bar">
+<ActionBar title="My GreenPatch" class="action-bar">
 </ActionBar>
 
 <StackLayout>
@@ -6,7 +6,10 @@
   <GridLayout rows="*, 75">
     <ListView row="0" [items]="plants" class="list-group">
       <ng-template let-plant="item">
+        <StackLayout orientation="horizontal">
         <Label [text]="plant.name" class="list-group-item"></Label>
+        <Button class="fa" [text]="'fa-trash' | fonticon" (tap)="deletePlant(plant)"></Button>
+        </StackLayout>
       </ng-template>
     </ListView>
     <StackLayout row="1">
