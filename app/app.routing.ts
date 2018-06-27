@@ -3,12 +3,14 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { Routes } from "@angular/router";
 
 import { HomeComponent } from "./home/home.component";
-import { AddPlantComponent } from "~/add-plant/add-plant.component";
+import { AddPlantComponent } from "./add-plant/add-plant.component";
+import { PlantProfileComponent } from "./plant-profile/plant-profile.component";
 
 const routes: Routes = [
     { path: "", redirectTo: "/home", pathMatch: "full" },
     { path: "home", component: HomeComponent },
-    { path: "add-plant", component: AddPlantComponent }
+    { path: "add-plant", component: AddPlantComponent },
+    { path: "plant-profile", component: PlantProfileComponent}
 ];
 
 @NgModule({

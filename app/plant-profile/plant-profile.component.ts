@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Plant } from '~/shared/plant';
+import { DataParams } from '../services/data-params';
+import { Page } from 'ui/page';
+import { Image } from 'tns-core-modules/ui/image/image';
 
 @Component({
   moduleId: module.id,
@@ -8,8 +12,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlantProfileComponent implements OnInit {
 
-  constructor() { }
+  plant: Plant;
 
-  ngOnInit() { }
+  constructor(private dataParams: DataParams,
+              private page: Page) {
+    
+    this.plant = dataParams.storage;
+    console.log(this.plant);
+  }
+
+  ngOnInit() {
+    //console.log("Selected plant:");
+    //console.log(this.plant.frontpageImage);
+    let profileImage = <Image>this.page.getViewById<Image>('profileImage');
+    profileImage.src = this.plant.frontpageImage;
+   }
 
 }

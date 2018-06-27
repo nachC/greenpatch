@@ -1,21 +1,28 @@
-<ActionBar title="Add New Plant" class="action-bar">
+<ActionBar roboto-bold="{{plant.name | uppercase}}" class="action-bar">
 </ActionBar>
 
 <StackLayout>
-<GridLayout rows="auto, *, auto">
-  <Image row="0" stretch="aspectFill" src="res://imgph"></Image>
-  <GridLayout row="1" rows="auto, auto, auto, auto, auto" columns="*, *">
-    <Label row="0" col="0" text="Planted"></Label>
-    <Label row="0" col="1" text="date planted"></Label>
-    <Label row="1" col="0" text="Planted"></Label>
-    <Label row="1" col="1" text="date planted"></Label>
-    <Label row="2" col="0" text="Planted"></Label>
-    <Label row="2" col="1" text="date planted"></Label>
-    <Label row="3" col="0" text="Planted"></Label>
-    <Label row="3" col="1" text="date planted"></Label>
-    <Label row="4" col="0" text="Planted"></Label>
-    <Label row="4" col="1" text="date planted"></Label>
+<GridLayout rows="200, auto, auto">
+  <Image id="profileImage" row="0" src="res://imgph"></Image>
+  <GridLayout row="1" rows="auto, auto, auto" columns="*, *">
+    <Label row="0" col="0" colspan="2" class="green-accent roboto-bold stackDetails" padding="5" fontSize="25" text="{{plant.name | uppercase}}"></Label>
+    <StackLayout row="1" col="0">
+      <Label class="roboto-bold stackDetails" text="Planted"></Label>
+      <Label class="roboto-italic stackDetails" text="{{plant.datePlanted | date}}"></Label>
+    </StackLayout>
+    <StackLayout row="1" col="1">
+      <Label class="roboto-bold stackDetails" row="1" col="0" text="Expected harvest"></Label>
+      <Label class="roboto-italic stackDetails" row="1" col="1" text="{{plant.dateHarvest | date}}"></Label>
+    </StackLayout>
+    <StackLayout row="2" col="0">
+      <Label class="roboto-bold stackDetails" row="2" col="0" text="Last time watered"></Label>
+      <Label class="roboto-italic stackDetails" row="2" col="1" text="{{plant.datePlanted | date}}"></Label>
+    </StackLayout>
+    <Button row="2" col="1" class="btn btn-outline" text="Remind Me"></Button>
   </GridLayout>
-  <Image row="2" stretch="aspectFill" src="res://imgph"></Image>
+  <StackLayout row="2" orientation="horizontal">
+    <Label class="green-accent roboto-bold stackDetails" padding="5" fontSize="25" text="NOTES" textAlignment="left"></Label>
+    <Button class="fa" [text]="'fa-trash' | fonticon" (tap)="deletePlant(plant)"></Button>
+  </StackLayout>
 </GridLayout>
 </StackLayout>

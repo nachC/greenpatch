@@ -5,6 +5,11 @@ import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/mod
 import { DatePickerModalComponent } from '~/date-picker-modal/date-picker-modal.component';
 import { CouchbaseService } from "../services/couchbase.service";
 import {RouterExtensions} from "nativescript-angular/router";
+import * as camera from 'nativescript-camera';
+import { Image } from 'ui/image';
+import { Page } from 'ui/page';
+import * as imagepicker from 'nativescript-imagepicker';
+import { Switch } from "ui/switch";
 
 @Component({
   moduleId: module.id,
@@ -17,7 +22,7 @@ export class AddPlantComponent implements OnInit {
   plantProfileData: FormGroup;
   submittedPlantProfileData = {
                                 name: '',
-                                frontpageImage: '',
+                                frontpageImage: null,
                                 imageGalery: [],
                                 datePlanted: '',
                                 dateHarvest: '',
@@ -27,16 +32,19 @@ export class AddPlantComponent implements OnInit {
   
   documentId: string = 'plants';
   formSubmissions = [];
+  profileImage: Image;
+  harvest: boolean = false;
 
   constructor(private fb: FormBuilder,
               private modalService: ModalDialogService,
               private vcRef: ViewContainerRef,
               private couchbaseService: CouchbaseService,
-              private routerExtensions: RouterExtensions) {
+              private routerExtensions: RouterExtensions,
+              private page: Page) {
 
     this.plantProfileData = this.fb.group({
         name: ['', Validators.required],
-        frontpageImage: '',
+        frontpageImage: null,
         imageGalery: [],
         datePlanted: ['', Validators.required],
         dateHarvest: '',
@@ -51,8 +59,8 @@ export class AddPlantComponent implements OnInit {
     else {
       this.formSubmissions = doc.plants;
     }
-    console.log("doc in constructor:")
-    console.log(doc);
+    /* console.log("doc in constructor:")
+    console.log(doc); */
 
    }
 
@@ -89,18 +97,67 @@ export class AddPlantComponent implements OnInit {
       });
   }
 
+  onFirstChecked(args) {
+    let harvestSwitch = <Switch>args.object;
+    if(harvestSwitch.checked) {
+      this.harvest = true;
+    }
+    else {
+      this.harvest = false;
+    }
+  }
+
+  takePicture() {
+    if(camera.isAvailable()) {
+      camera.requestPermissions();   
+      camera.takePicture()
+        .then((imageAsset) => {
+            this.profileImage = <Image>this.page.getViewById<Image>('profileImage');
+            this.profileImage.src = imageAsset;
+            this.plantProfileData.patchValue({frontpageImage: imageAsset.android});
+        }).catch((err) => {
+            console.log("Error -> " + err.message);
+        });
+    }
+  }
+
+  uploadPicture() {
+    let image = <Image>this.page.getViewById<Image>('profileImage');
+
+    let context = imagepicker.create({
+      mode: 'single'
+    });
+    
+    //let test = this.plantProfileData;
+
+    context
+      .authorize()
+        .then(() => {
+          return context.present();
+        })
+        .then((selection) => {
+          //console.log("This is selection " + JSON.stringify(selection));
+          //console.log("This is selection[0] " + JSON.stringify(selection[0]));
+          image.src = selection[0];
+          this.plantProfileData.patchValue({frontpageImage: selection[0].android});
+          console.log(selection[0].android);
+        })
+        .catch(function(e) {
+          console.log("Error -> " + e);
+        })
+  }
+
   onSubmit() {
     this.submittedPlantProfileData.name = this.plantProfileData.value.name;
     this.submittedPlantProfileData.datePlanted = this.plantProfileData.value.datePlanted;
     this.submittedPlantProfileData.dateHarvest = this.plantProfileData.value.dateHarvest;
+    this.submittedPlantProfileData.frontpageImage = this.plantProfileData.value.frontpageImage;
 
     this.formSubmissions.push(this.submittedPlantProfileData);
     this.couchbaseService.updateDocument(this.documentId, {"plants" : this.formSubmissions});
     console.log("formSubmissions:");
     console.log(this.formSubmissions);
     let doc = this.couchbaseService.getDocument(this.documentId);
-    console.log("doc onSubimit:");
-    console.log(doc);
     this.routerExtensions.navigate(["/home"], { clearHistory: true});
   }
 

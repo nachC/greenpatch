@@ -4,16 +4,17 @@
 <StackLayout>
   <!-- <SearchBar id="searchBar" hint="Search plant" submit="onSubmit"></SearchBar> -->
   <GridLayout rows="*, 75">
-    <ListView row="0" [items]="plants" class="list-group">
+    <ListView *ngIf="!zeroPlants" row="0" [items]="plants" class="list-group">
       <ng-template let-plant="item">
-        <StackLayout orientation="horizontal">
+        <StackLayout orientation="horizontal" (tap)="selectPlant(plant)">
         <Label [text]="plant.name" class="list-group-item"></Label>
         <Button class="fa" [text]="'fa-trash' | fonticon" (tap)="deletePlant(plant)"></Button>
         </StackLayout>
       </ng-template>
     </ListView>
+    <Label *ngIf="zeroPlants" row="0" text="You've got to plant some plants!"></Label>
     <StackLayout row="1">
-        <Button class="btn btn-primary btn-active" text="Add new plant" [nsRouterLink]="['/add-plant']"></Button>
+      <Button class="btn btn-primary btn-active" text="Add new plant" [nsRouterLink]="['/add-plant']"></Button>
     </StackLayout>
-  </GridLayout>>
+  </GridLayout>
 </StackLayout>

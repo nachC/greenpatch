@@ -11,6 +11,21 @@ refer to http://docs.nativescript.org/ui/theme.
 */
 @import '~nativescript-theme-core/css/core.light.css';
 
+.roboto-bold {
+    font-family: "ROBOTOMONO-BOLD", 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+.roboto-italic {
+    font-family: "ROBOTOMONO-ITALIC", 'Courier New', Courier, monospace;
+    font-style: italic;
+}
+
 .fa {
     font-family: FontAwesome, fontawesome-webfont;
+}
+
+.green-accent {
+    background-color: #236d02;
+    color: white;
 }

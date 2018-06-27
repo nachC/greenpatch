@@ -12,6 +12,8 @@ import { PlantProfileComponent } from "./plant-profile/plant-profile.component";
 import { DatePickerModalComponent } from "./date-picker-modal/date-picker-modal.component";
 
 import { CouchbaseService } from "./services/couchbase.service";
+import { DataParams } from "./services/data-params";
+
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
@@ -41,7 +43,8 @@ import { CouchbaseService } from "./services/couchbase.service";
     entryComponents: [
         DatePickerModalComponent
     ],
-    providers: [CouchbaseService],
+    providers: [CouchbaseService,
+                DataParams],
     schemas: [
         NO_ERRORS_SCHEMA
     ]
