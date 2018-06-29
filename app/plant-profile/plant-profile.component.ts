@@ -28,4 +28,8 @@ export class PlantProfileComponent implements OnInit {
     profileImage.src = this.plant.frontpageImage;
    }
 
+   addNote() {
+     console.log("Add new note");
+   }
+
 }
