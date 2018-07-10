@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef} from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { TextField } from 'ui/text-field';
 import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
@@ -34,6 +34,7 @@ export class AddPlantComponent implements OnInit {
   formSubmissions = [];
   profileImage: Image;
   harvest: boolean = false;
+  formIsValid: boolean = false;
 
   constructor(private fb: FormBuilder,
               private modalService: ModalDialogService,
@@ -59,17 +60,20 @@ export class AddPlantComponent implements OnInit {
     else {
       this.formSubmissions = doc.plants;
     }
-    /* console.log("doc in constructor:")
-    console.log(doc); */
-
    }
 
   ngOnInit() {}
 
   onNameChange(args) {
     let textField = <TextField>args.object;
-    this.plantProfileData.patchValue({name: textField.text});
+    if(textField.text.length == 0) {
+      this.formIsValid = false;
+    } else {
+      this.plantProfileData.patchValue({name: textField.text});
+      this.formIsValid = true;
+    }
   }
+
 
   onDatePlantedChange(args) {
     let textField = <TextField>args.object;
@@ -127,8 +131,6 @@ export class AddPlantComponent implements OnInit {
     let context = imagepicker.create({
       mode: 'single'
     });
-    
-    //let test = this.plantProfileData;
 
     context
       .authorize()
@@ -155,8 +157,8 @@ export class AddPlantComponent implements OnInit {
 
     this.formSubmissions.push(this.submittedPlantProfileData);
     this.couchbaseService.updateDocument(this.documentId, {"plants" : this.formSubmissions});
-    console.log("formSubmissions:");
-    console.log(this.formSubmissions);
+    /* console.log("formSubmissions:");
+    console.log(this.formSubmissions); */
     let doc = this.couchbaseService.getDocument(this.documentId);
     this.routerExtensions.navigate(["/home"], { clearHistory: true});
   }

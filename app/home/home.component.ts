@@ -3,6 +3,9 @@ import { Plant } from '../shared/plant';
 import { CouchbaseService } from "../services/couchbase.service";
 import { DataParams } from '../services/data-params';
 import {RouterExtensions} from "nativescript-angular/router";
+import { PlatformLocation } from '@angular/common';
+import { PageRoute } from "nativescript-angular/router";
+import { switchMap } from "rxjs/operators";
 
 @Component({
   moduleId: module.id,
@@ -18,7 +21,9 @@ export class HomeComponent implements OnInit {
 
   constructor(private couchbaseservice: CouchbaseService,
               private dataparams: DataParams,
-              private routerExtensions: RouterExtensions) {
+              private routerExtensions: RouterExtensions,
+              private location : PlatformLocation,
+              private pageRoute: PageRoute) {
 
     let doc = this.couchbaseservice.getDocument('plants');
     if(doc == null) {
@@ -32,12 +37,26 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.location.onPopState(() => {
+      let doc = this.couchbaseservice.getDocument('plants');
+      if(doc == null) {
+        console.log("No plants in db");
+        this.numberOfPlants = 0;
+      }
+      else {
+        this.plants = doc.plants;
+        this.numberOfPlants = this.plants.length;
+      }
+    });
+    
     if(this.numberOfPlants == 0) {
       this.zeroPlants = true;
     }
     else if(this.numberOfPlants != 0) {
       this.zeroPlants = false;
     }
+
+    console.log(this.plants);
   }
 
   deletePlant(obj: Plant) {

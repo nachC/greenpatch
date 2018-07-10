@@ -10,15 +10,15 @@
     <Label row="2" col="0" text="Do you expect to harvest?" verticalAlignment="center" class="m-20"></Label>
     <Switch class="m-15" horizontalAlignment="left" checked="false" (checkedChange)="onFirstChecked($event)" row="2" col="1"></Switch>
     <Label *ngIf="harvest" row="3" col="0" text="Date of harvest" verticalAlignment="center" class="m-20"></Label>
-    <TextField *ngIf="harvest" row="3" col="1" hint="When do you expect to harvest?" class="input input-border" (tap)="createModalView('harvest')" (textChange)="onDateHarvestChange($event)" formControlName="dateHarvest"></TextField>
-    <StackLayout row="4" col="0" colSpan="2" class="imagePreview m-10">
-        <Label horizontalAlignment="center" text="ADD A PICTURE OF YOUR PLANT" fontSize="22" backgroundColor="#ccc" class="m-5"></Label>
-        <StackLayout orientation="horizontal" horizontalAlignment="center" class="m-5">
-          <Button class="btn btn-primary btn-active" text="Take picture" (tap)="takePicture()"></Button>
-          <Button class="btn btn-primary btn-active" text="Upload picture" (tap)="uploadPicture()"></Button>
-        </StackLayout>
-        <Image id="profileImage" src="res://imgph"></Image>
+    <TextField *ngIf="harvest" row="3" col="1" hint="When?" class="input input-border" (tap)="createModalView('harvest')" (textChange)="onDateHarvestChange($event)" formControlName="dateHarvest"></TextField>
+    <StackLayout row="4" col="0" colSpan="2" class="imagePreview">
+      <Label horizontalAlignment="center" text="ADD A PICTURE OF YOUR PLANT" fontSize="22"></Label>
+      <StackLayout orientation="horizontal" horizontalAlignment="center" class="m-5">
+        <Button class="btn btn-primary btn-active" text="Take picture" (tap)="takePicture()"></Button>
+        <Button class="btn btn-primary btn-active" text="Upload picture" (tap)="uploadPicture()"></Button>
+      </StackLayout>
+      <Image id="profileImage" src="res://imgph" marginTop="15"></Image>
     </StackLayout>
-    <Button row="5" col="0" colSpan="2" class="btn btn-primary btn-active" text="Submit" (tap)="onSubmit()"></Button>
+    <Button row="5" col="0" colSpan="2" isEnabled="{{formIsValid}}" class="btn btn-primary" text="Submit" (tap)="onSubmit()"></Button>
   </GridLayout>
 </StackLayout>
