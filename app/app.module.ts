@@ -10,6 +10,7 @@ import { HomeComponent } from "./home/home.component";
 import { AddPlantComponent } from "./add-plant/add-plant.component";
 import { PlantProfileComponent } from "./plant-profile/plant-profile.component";
 import { DatePickerModalComponent } from "./date-picker-modal/date-picker-modal.component";
+import { EditProfileModalComponentComponent } from "./edit-profile-modal-component/edit-profile-modal-component.component";
 
 import { CouchbaseService } from "./services/couchbase.service";
 import { DataParams } from "./services/data-params";
@@ -38,10 +39,12 @@ import { DataParams } from "./services/data-params";
         HomeComponent,
         AddPlantComponent,
         PlantProfileComponent,
-        DatePickerModalComponent
+        DatePickerModalComponent,
+        EditProfileModalComponentComponent
     ],
     entryComponents: [
-        DatePickerModalComponent
+        DatePickerModalComponent,
+        EditProfileModalComponentComponent
     ],
     providers: [CouchbaseService,
                 DataParams],
