@@ -4,7 +4,7 @@
 <StackLayout>
   <GridLayout rows="auto, auto, auto, auto, *, 75" columns="auto, *" [formGroup]="plantProfileData">
     <Label row="0" col="0" text="Name" verticalAlignment="center" class="m-20"></Label>
-    <TextField row="0" col="1" hint="Enter plant's name" class="input input-border" (textChange)="onNameChange($event)" formControlName="name"></TextField>
+    <TextField row="0" col="1" hint="Enter plant's name" class="input input-border" (textChange)="onNameChange($event)" returnKeyType="done" formControlName="name"></TextField>
     <Label row="1" col="0" text="Date planted" verticalAlignment="center" class="m-20"></Label>
     <TextField row="1" col="1" hint="When did you plant it?" class="input input-border" (tap)="createModalView('planted')" (textChange)="onDatePlantedChange($event)" formControlName="datePlanted"></TextField>
     <Label row="2" col="0" text="Do you expect to harvest?" verticalAlignment="center" class="m-20"></Label>
@@ -14,7 +14,7 @@
     <StackLayout row="4" col="0" colSpan="2" class="imagePreview">
       <Label horizontalAlignment="center" text="ADD A PICTURE OF YOUR PLANT" fontSize="22"></Label>
       <StackLayout orientation="horizontal" horizontalAlignment="center" class="m-5">
-        <Button class="btn btn-primary btn-active" text="Take picture" (tap)="takePicture()"></Button>
+        <Button class="btn btn-primary btn-active" text="Take picture" (tap)="capturePicture()"></Button>
         <Button class="btn btn-primary btn-active" text="Upload picture" (tap)="uploadPicture()"></Button>
       </StackLayout>
       <Image id="profileImage" src="res://imgph" marginTop="15"></Image>

@@ -1,0 +1,15 @@
+<StackLayout class="modal-view-style">
+  <StackLayout class="stack">
+    <Label class="label roboto-bold" text="Name"></Label>
+    <TextField [text]="newName" class="input input-border" returnKeyType="done" (textChange)="onNameChange($event)" hint="Enter new name"></TextField>
+  </StackLayout>
+  <StackLayout class="stack">
+    <Label class="label roboto-bold" text="Planted Date"></Label>
+    <DatePicker id="plantedPicker" (loaded)="onPickerLoaded1($event)" (dayChange)="onDayChanged1($event)" (monthChange)="onMonthChanged1($event)" (yearChange)="onYearChanged1($event)" verticalAlignment="center"></DatePicker>
+  </StackLayout>
+  <StackLayout class="stack">
+    <Label class="label roboto-bold" text="Harvest Date"></Label>
+    <DatePicker id="harvestPicker" (loaded)="onPickerLoaded2($event)" (dayChange)="onDayChanged2($event)" (monthChange)="onMonthChanged2($event)" (yearChange)="onYearChanged2($event)" verticalAlignment="center"></DatePicker>
+    <Button class="btn btn-primary btn-active" text="submit" (tap)="onSubmit()"></Button>
+  </StackLayout>
+</StackLayout>

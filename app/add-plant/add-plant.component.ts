@@ -111,7 +111,7 @@ export class AddPlantComponent implements OnInit {
     }
   }
 
-  takePicture() {
+  capturePicture() {
     if(camera.isAvailable()) {
       camera.requestPermissions();   
       camera.takePicture()
@@ -138,15 +138,13 @@ export class AddPlantComponent implements OnInit {
           return context.present();
         })
         .then((selection) => {
-          //console.log("This is selection " + JSON.stringify(selection));
-          //console.log("This is selection[0] " + JSON.stringify(selection[0]));
           image.src = selection[0];
           this.plantProfileData.patchValue({frontpageImage: selection[0].android});
           console.log(selection[0].android);
         })
         .catch(function(e) {
           console.log("Error -> " + e);
-        })
+        });
   }
 
   onSubmit() {
@@ -162,5 +160,4 @@ export class AddPlantComponent implements OnInit {
     let doc = this.couchbaseService.getDocument(this.documentId);
     this.routerExtensions.navigate(["/home"], { clearHistory: true});
   }
-
 }
