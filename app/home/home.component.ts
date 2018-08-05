@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Plant } from '../shared/plant';
 import { CouchbaseService } from "../services/couchbase.service";
 import { DataParams } from '../services/data-params';
-import {RouterExtensions} from "nativescript-angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
 import { PlatformLocation } from '@angular/common';
-import { PageRoute } from "nativescript-angular/router";
-import { switchMap } from "rxjs/operators";
+import { confirm } from "ui/dialogs";
 
 @Component({
   moduleId: module.id,
@@ -20,10 +19,9 @@ export class HomeComponent implements OnInit {
   zeroPlants: boolean;
 
   constructor(private couchbaseservice: CouchbaseService,
-              private dataparams: DataParams,
+              private dataParams: DataParams,
               private routerExtensions: RouterExtensions,
-              private location : PlatformLocation,
-              private pageRoute: PageRoute) {
+              private location : PlatformLocation) {
 
     let doc = this.couchbaseservice.getDocument('plants');
     if(doc == null) {
@@ -55,14 +53,25 @@ export class HomeComponent implements OnInit {
     else if(this.numberOfPlants != 0) {
       this.zeroPlants = false;
     }
+  }
 
-    console.log(this.plants);
+  confirmDelete(obj: Plant) {
+    let options = {
+      title: "Delete",
+      message: "Are you sure you want to delete this plant?",
+      okButtonText: "Yes",
+      cancelButtonText: "No"
+    };
+  
+    confirm(options).then((result: boolean) => {
+        if(result) {
+          this.deletePlant(obj);
+        }
+    });
   }
 
   deletePlant(obj: Plant) {
-    //console.log(obj);
     let indexToDelete = this.plants.indexOf(obj);
-    //console.log(indexToDelete);
     this.plants.splice(indexToDelete, 1);
     this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
     this.numberOfPlants = this.plants.length;
@@ -72,12 +81,10 @@ export class HomeComponent implements OnInit {
     else if(this.numberOfPlants != 0) {
       this.zeroPlants = false;
     }
-    //console.log(this.plants);
   }
 
   selectPlant(obj: Plant) {
-    //console.log(obj);
-    this.dataparams.storage = obj;
+    this.dataParams.storage = obj;
     this.routerExtensions.navigate(['/plant-profile']);
   }
 

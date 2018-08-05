@@ -15,6 +15,7 @@ import { Label } from 'ui/label';
 import { action } from 'ui/dialogs';
 import * as camera from 'nativescript-camera';
 import * as imagepicker from 'nativescript-imagepicker';
+import { ImageGaleryModalComponent } from '~/image-galery-modal/image-galery-modal.component';
 
 @Component({
   moduleId: module.id,
@@ -23,7 +24,7 @@ import * as imagepicker from 'nativescript-imagepicker';
   styleUrls: ['./plant-profile.component.scss']
 })
 export class PlantProfileComponent implements OnInit {
-
+  
   plants: Plant[];
   plant: Plant;
   updatedData = false;
@@ -38,7 +39,6 @@ export class PlantProfileComponent implements OnInit {
               private vcRef: ViewContainerRef) {
     
     this.plant = dataParams.storage;
-    //console.log(this.plant);
     let doc = this.couchbaseservice.getDocument('plants');
     this.plants = doc.plants;
   }
@@ -69,7 +69,7 @@ export class PlantProfileComponent implements OnInit {
         this.uploadPicture();
       }
       if(result == "Change details") {
-        this.createModalView();
+        this.createEditModalView();
       }
     });
   }
@@ -124,7 +124,7 @@ export class PlantProfileComponent implements OnInit {
         });
   }
 
-  createModalView() {
+  createEditModalView() {
     let options: ModalDialogOptions = {
       viewContainerRef: this.vcRef,
       context: {
@@ -137,24 +137,51 @@ export class PlantProfileComponent implements OnInit {
     this.modalService.showModal(EditProfileModalComponent, options)
       .then(result => {
         if(result) {
+          console.log(result);
           this.plants.filter((plant) => {
             if(plant.name === this.plant.name) {
               let indexToReplace = this.plants.indexOf(plant);
               plant.name = result.newName;
-              plant.datePlanted = result.updatedPlantedDate;
-              plant.dateHarvest = result.updatedHarvestDate;
+              if(result.updatedPlantedDate) {
+                plant.datePlanted = result.updatedPlantedDate;
+              }
+              if(result.updatedHarvestDate) {
+                plant.dateHarvest = result.updatedHarvestDate;
+              }
               this.plants[indexToReplace] = plant;
               this.plant = plant
               this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
             }
            });
-          //console.log(result);
         }
         else {
           console.log("Result undefined");
         }
         
       });
+  }
+
+  createImageGaleryModalView() {
+    let options: ModalDialogOptions = {
+      viewContainerRef: this.vcRef,
+      context: this.plant.imageGalery,
+      fullscreen: true
+    };
+
+    this.modalService.showModal(ImageGaleryModalComponent, options)
+      .then(newImageGalery => {
+        if(newImageGalery.updated) {
+          this.plants.filter((plant) => {
+            if(plant.name === this.plant.name) {
+              let indexToReplace = this.plants.indexOf(plant);
+              plant.imageGalery = newImageGalery.images;
+              this.plants[indexToReplace] = plant;
+              this.plant = plant
+              this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
+            }
+          })
+        }
+      })
   }
 
   updateLastWaterDate() {

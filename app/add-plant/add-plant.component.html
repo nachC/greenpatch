@@ -1,7 +1,7 @@
-<ActionBar title="Add New Plant" class="action-bar">
+<ActionBar title="Add New Plant" class="action-bar green-accent">
   </ActionBar>
 
-<StackLayout>
+<StackLayout class="secondary-color">
   <GridLayout rows="auto, auto, auto, auto, *, 75" columns="auto, *" [formGroup]="plantProfileData">
     <Label row="0" col="0" text="Name" verticalAlignment="center" class="m-20"></Label>
     <TextField row="0" col="1" hint="Enter plant's name" class="input input-border" (textChange)="onNameChange($event)" returnKeyType="done" formControlName="name"></TextField>
@@ -17,7 +17,7 @@
         <Button class="btn btn-primary btn-active" text="Take picture" (tap)="capturePicture()"></Button>
         <Button class="btn btn-primary btn-active" text="Upload picture" (tap)="uploadPicture()"></Button>
       </StackLayout>
-      <Image id="profileImage" src="res://imgph" marginTop="15"></Image>
+      <Image id="profileImage" src="" marginTop="15"></Image>
     </StackLayout>
     <Button row="5" col="0" colSpan="2" isEnabled="{{formIsValid}}" class="btn btn-primary" text="Submit" (tap)="onSubmit()"></Button>
   </GridLayout>

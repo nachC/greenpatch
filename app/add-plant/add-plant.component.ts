@@ -127,7 +127,6 @@ export class AddPlantComponent implements OnInit {
 
   uploadPicture() {
     let image = <Image>this.page.getViewById<Image>('profileImage');
-
     let context = imagepicker.create({
       mode: 'single'
     });

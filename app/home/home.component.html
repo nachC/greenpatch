@@ -1,18 +1,18 @@
-<ActionBar title="My GreenPatch" class="action-bar">
+<ActionBar title="My GreenPatch" class="action-bar green-accent">
 </ActionBar>
 
-<StackLayout>
-  <!-- <SearchBar id="searchBar" hint="Search plant" submit="onSubmit"></SearchBar> -->
+<StackLayout class="secondary-color">
   <GridLayout rows="*, 75">
     <ListView *ngIf="!zeroPlants" row="0" [items]="plants" class="list-group">
       <ng-template let-plant="item">
-        <StackLayout orientation="horizontal" (tap)="selectPlant(plant)">
-        <Label [text]="plant.name" class="list-group-item"></Label>
-        <Button class="fa" [text]="'fa-trash' | fonticon" (tap)="deletePlant(plant)"></Button>
-        </StackLayout>
+        <GridLayout rows="*" columns="auto, *, 50" class="list-group-item item" (tap)="selectPlant(plant)">
+          <Image row="0" col="0" [src]="plant.frontpageImage" class="thumb img-circle"></Image>
+          <Label row="0" col="1" [text]="plant.name" class="list-group-item"></Label>
+          <Button row="0" col="2" class="fa" [text]="'fa-trash' | fonticon" (tap)="confirmDelete(plant)"></Button>
+        </GridLayout>
       </ng-template>
     </ListView>
-    <Label *ngIf="zeroPlants" row="0" text="You've got to plant some plants!"></Label>
+    <Label *ngIf="zeroPlants" class="roboto-italic m-t-25" horizontalAlignment="center" row="0" text="You've got to plant some plants!"></Label>
     <StackLayout row="1">
       <Button class="btn btn-primary btn-active" text="Add new plant" [nsRouterLink]="['/add-plant']"></Button>
     </StackLayout>

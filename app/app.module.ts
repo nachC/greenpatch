@@ -11,6 +11,7 @@ import { AddPlantComponent } from "./add-plant/add-plant.component";
 import { PlantProfileComponent } from "./plant-profile/plant-profile.component";
 import { DatePickerModalComponent } from "./date-picker-modal/date-picker-modal.component";
 import { EditProfileModalComponent } from "./edit-profile-modal/edit-profile-modal.component";
+import { ImageGaleryModalComponent } from "./image-galery-modal/image-galery-modal.component";
 
 import { CouchbaseService } from "./services/couchbase.service";
 import { DataParams } from "./services/data-params";
@@ -40,11 +41,13 @@ import { DataParams } from "./services/data-params";
         AddPlantComponent,
         PlantProfileComponent,
         DatePickerModalComponent,
-        EditProfileModalComponent
+        EditProfileModalComponent,
+        ImageGaleryModalComponent
     ],
     entryComponents: [
         DatePickerModalComponent,
-        EditProfileModalComponent
+        EditProfileModalComponent,
+        ImageGaleryModalComponent
     ],
     providers: [CouchbaseService,
                 DataParams],

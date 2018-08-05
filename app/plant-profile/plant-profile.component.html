@@ -1,11 +1,11 @@
-<ActionBar title="{{plant.name | uppercase}}" class="action-bar">
+<ActionBar title="{{plant.name | uppercase}}" class="action-bar green-accent">
   <NavigationButton android.systemIcon="ic_menu_back" (tap)="goBack()"></NavigationButton>
   <ActionItem (tap)="openEditActions()" android.position="popup">
     <Button class="btn btn-rounded-lg btn-active" text="Edit"></Button>
   </ActionItem>
 </ActionBar>
 
-<StackLayout>
+<StackLayout class="secondary-color">
 <GridLayout rows="200, auto, *">
   <Image row="0" id="profileImage" src="res://imgph"></Image>
   <GridLayout row="1" rows="auto, auto, auto, auto" columns="*, *">
@@ -16,15 +16,19 @@
     </StackLayout>
     <StackLayout row="1" col="1" marginTop="15">
       <Label class="roboto-bold stackDetailsTitle details" row="1" col="0" text="Expected harvest"></Label>
-      <Label class="roboto-italic stackDetailsSubtitle details" row="1" col="1" text="{{plant.dateHarvest | date}}"></Label>
+      <Label class="roboto-italic stackDetailsSubtitle details" row="1" col="1" text="{{plant.dateHarvest ? (plant.dateHarvest | date) : 'None'}}"></Label>
     </StackLayout>
     <StackLayout row="2" col="0">
       <Label class="roboto-bold stackDetailsTitle details" row="2" col="0" text="Last time watered"></Label>
       <Label class="roboto-italic stackDetailsSubtitle details" row="2" col="1" text="{{plant.lastWaterDate | date}}"></Label>
     </StackLayout>
-    <Button row="2" col="1" class="btn btn-active green-accent" text="Update" (tap)="updateLastWaterDate()"></Button>
-    <Button row="3" col="0" class="btn btn-active green-accent" text="Water Reminder"></Button>
-    <Button row="3" col="1" class="btn btn-active green-accent" text="Image Galery"></Button>
+    <Button row="2" col="1" class="btn btn-active green-accent" (tap)="updateLastWaterDate()">
+      <FormattedString>
+        <Span class="fa" [text]="'fa-arrow-left' | fonticon"></Span>
+        <Span  text=" UPDATE" color="#fff"></Span>
+      </FormattedString>
+    </Button>
+    <Button row="3" col="0" colSpan="2" class="btn btn-active green-accent" text="Image Galery" (tap)="createImageGaleryModalView()"></Button>
   </GridLayout>
   <StackLayout row="2">
     <GridLayout rows="auto" columns="auto, *, 40" class="green-accent">

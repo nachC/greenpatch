@@ -29,3 +29,7 @@ refer to http://docs.nativescript.org/ui/theme.
     background-color: #236d02;
     color: white;
 }
+
+.secondary-color {
+    background-color: #e2f2da;
+}
