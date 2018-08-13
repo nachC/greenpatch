@@ -50,7 +50,7 @@ export class PlantProfileComponent implements OnInit {
 
   openEditActions() {
     let options = {
-      title : "Actions",
+      title : "Edit",
       cancelButtonText : "Cancel",
       actions : [
         "Take new picture",

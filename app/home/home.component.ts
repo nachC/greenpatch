@@ -42,6 +42,8 @@ export class HomeComponent implements OnInit {
         this.numberOfPlants = 0;
       }
       else {
+        console.log("document: ");
+        console.log(doc);
         this.plants = doc.plants;
         this.numberOfPlants = this.plants.length;
       }
