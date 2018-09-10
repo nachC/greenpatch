@@ -21,7 +21,6 @@ export class EditProfileModalComponent implements OnInit {
   showPlanted = false;
 
   constructor(private params: ModalDialogParams) { 
-    //console.log(params.context.datePlanted);
     this.newName = params.context.name;
   }
 
@@ -120,8 +119,6 @@ export class EditProfileModalComponent implements OnInit {
       "updatedPlantedDate" : this.newPlantedDate,
       "updatedHarvestDate" : this.newHarvestDate
     }
-
-    //console.log(paramsData);
 
     this.params.closeCallback(paramsData);
   }

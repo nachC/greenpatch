@@ -14,7 +14,6 @@ import { EditProfileModalComponent } from "./edit-profile-modal/edit-profile-mod
 import { ImageGaleryModalComponent } from "./image-galery-modal/image-galery-modal.component";
 
 import { CouchbaseService } from "./services/couchbase.service";
-import { DataParams } from "./services/data-params";
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -49,8 +48,7 @@ import { DataParams } from "./services/data-params";
         EditProfileModalComponent,
         ImageGaleryModalComponent
     ],
-    providers: [CouchbaseService,
-                DataParams],
+    providers: [CouchbaseService],
     schemas: [
         NO_ERRORS_SCHEMA
     ]

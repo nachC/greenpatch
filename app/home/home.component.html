@@ -3,12 +3,12 @@
 
 <StackLayout class="secondary-color">
   <GridLayout rows="*, 75">
-    <ListView *ngIf="!zeroPlants" row="0" [items]="plants" class="list-group">
+    <ListView *ngIf="!zeroPlants" row="0" [items]="documents" class="list-group">
       <ng-template let-plant="item">
-        <GridLayout rows="*" columns="auto, *, 50" class="list-group-item item" (tap)="selectPlant(plant)">
+        <GridLayout rows="*" columns="auto, *, 50" class="list-group-item item" (tap)="selectPlant(plant._id)">
           <Image row="0" col="0" [src]="plant.frontpageImage" class="thumb img-circle"></Image>
           <Label row="0" col="1" [text]="plant.name" class="list-group-item"></Label>
-          <Button row="0" col="2" class="fa" [text]="'fa-trash' | fonticon" (tap)="confirmDelete(plant)"></Button>
+          <Button row="0" col="2" class="fa" [text]="'fa-trash' | fonticon" (tap)="deletePlant(plant._id)"></Button>
         </GridLayout>
       </ng-template>
     </ListView>

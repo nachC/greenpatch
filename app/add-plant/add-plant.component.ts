@@ -30,8 +30,6 @@ export class AddPlantComponent implements OnInit {
                                 notes: ''
                               };
   
-  documentId: string = 'plants';
-  formSubmissions = [];
   profileImage: Image;
   harvest: boolean = false;
   formIsValid: boolean = false;
@@ -52,19 +50,11 @@ export class AddPlantComponent implements OnInit {
         lastWaterDate: '',
         notes: ''
     });
-
-    let doc = this.couchbaseService.getDocument(this.documentId);
-    if(doc == null) {
-      this.couchbaseService.createDocument({"plants" : []}, this.documentId);
-    }
-    else {
-      this.formSubmissions = doc.plants;
-    }
    }
 
   ngOnInit() {}
 
-  onNameChange(args) {
+  onNameChange(args) {  
     let textField = <TextField>args.object;
     if(textField.text.length == 0) {
       this.formIsValid = false;
@@ -152,11 +142,8 @@ export class AddPlantComponent implements OnInit {
     this.submittedPlantProfileData.dateHarvest = this.plantProfileData.value.dateHarvest;
     this.submittedPlantProfileData.frontpageImage = this.plantProfileData.value.frontpageImage;
 
-    this.formSubmissions.push(this.submittedPlantProfileData);
-    this.couchbaseService.updateDocument(this.documentId, {"plants" : this.formSubmissions});
-    /* console.log("formSubmissions:");
-    console.log(this.formSubmissions); */
-    let doc = this.couchbaseService.getDocument(this.documentId);
+    let rand = Math.floor(Math.random() * 99999);
+    this.couchbaseService.createPlant(this.submittedPlantProfileData, this.submittedPlantProfileData.name + "_" + rand);
     this.routerExtensions.navigate(["/home"], { clearHistory: true});
   }
 }

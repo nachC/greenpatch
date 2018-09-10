@@ -1,21 +1,22 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Plant } from '~/shared/plant';
+import {RouterExtensions} from "nativescript-angular/router";
 import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
 import { EditProfileModalComponent } from '../edit-profile-modal/edit-profile-modal.component';
-import { DataParams } from '../services/data-params';
 import { CouchbaseService } from "../services/couchbase.service";
 import { Page, EventData } from 'ui/page';
 import { Image } from 'tns-core-modules/ui/image/image';
-import {RouterExtensions} from "nativescript-angular/router";
 import { TextView } from "ui/text-view";
-import * as utils from "utils/utils";
 import { isAndroid } from "platform";
-import * as frame from "ui/frame";
 import { Label } from 'ui/label';
 import { action } from 'ui/dialogs';
+import { ImageGaleryModalComponent } from '~/image-galery-modal/image-galery-modal.component';
+import { PageRoute } from "nativescript-angular/router";
+import { switchMap } from "rxjs/operators";
+import { Plant } from '~/shared/plant';
+
+import * as utils from "utils/utils";
 import * as camera from 'nativescript-camera';
 import * as imagepicker from 'nativescript-imagepicker';
-import { ImageGaleryModalComponent } from '~/image-galery-modal/image-galery-modal.component';
 
 @Component({
   moduleId: module.id,
@@ -25,22 +26,28 @@ import { ImageGaleryModalComponent } from '~/image-galery-modal/image-galery-mod
 })
 export class PlantProfileComponent implements OnInit {
   
-  plants: Plant[];
   plant: Plant;
   updatedData = false;
   editState = false;
   profileImage: Image;
+  id: string;
 
-  constructor(private dataParams: DataParams,
-              private page: Page,
+  constructor(private page: Page,
               private couchbaseservice: CouchbaseService,
               private routerExtensions: RouterExtensions,
               private modalService: ModalDialogService,
-              private vcRef: ViewContainerRef) {
+              private vcRef: ViewContainerRef,
+              private pageRoute: PageRoute) {
     
-    this.plant = dataParams.storage;
-    let doc = this.couchbaseservice.getDocument('plants');
-    this.plants = doc.plants;
+                this.pageRoute.activatedRoute.pipe(
+                  switchMap(activatedRoute => activatedRoute.params)
+                ).forEach((params) => { 
+                  this.id = params["id"];
+                });
+
+                let document = this.couchbaseservice.getPlant(this.id);
+                this.plant = document;
+                console.log(document);
   }
 
   ngOnInit() {
@@ -48,7 +55,7 @@ export class PlantProfileComponent implements OnInit {
     profileImage.src = this.plant.frontpageImage;
   }
 
-  openEditActions() {
+  openEditActions() {  
     let options = {
       title : "Edit",
       cancelButtonText : "Cancel",
@@ -68,7 +75,7 @@ export class PlantProfileComponent implements OnInit {
         console.log("Upload new picture clicked");
         this.uploadPicture();
       }
-      if(result == "Change details") {
+      else if(result == "Change details") {
         this.createEditModalView();
       }
     });
@@ -79,51 +86,40 @@ export class PlantProfileComponent implements OnInit {
       camera.requestPermissions();   
       camera.takePicture()
         .then((imageAsset) => {
-            this.profileImage = <Image>this.page.getViewById<Image>('profileImage');
-            this.profileImage.src = imageAsset;
-            this.plants.filter((plant) => {
-              if(plant.name === this.plant.name) {
-                let indexToReplace = this.plants.indexOf(plant);
-                plant.frontpageImage = imageAsset.android;
-                this.plants[indexToReplace] = plant;
-                this.plant = plant
-                this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
-              }
-             });
-        }).catch((err) => {
-            console.log("Error -> " + err.message);
+          this.profileImage = <Image>this.page.getViewById<Image>('profileImage');
+          this.profileImage.src = imageAsset;
+          this.plant.frontpageImage = imageAsset.android;
+          this.couchbaseservice.updatePlant(this.id, this.plant);
+        })
+        .catch((err) => {
+          console.log("Error -> " + err.message);
         });
     }
   }
-
+  
+  
   uploadPicture() {
-    let image = <Image>this.page.getViewById<Image>('profileImage');
+    this.profileImage = <Image>this.page.getViewById<Image>('profileImage');
     let context = imagepicker.create({
       mode: 'single'
     });
-
+    
     context
       .authorize()
         .then(() => {
           return context.present();
         })
         .then((selection) => {
-          image.src = selection[0];
-          this.plants.filter((plant) => {
-            if(plant.name === this.plant.name) {
-              let indexToReplace = this.plants.indexOf(plant);
-              plant.frontpageImage = selection[0].android;
-              this.plants[indexToReplace] = plant;
-              this.plant = plant
-              this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
-            }
-           });
+          this.profileImage.src = selection[0];
+          this.plant.frontpageImage = selection[0].android;
+          this.couchbaseservice.updatePlant(this.id, this.plant);
         })
         .catch(function(e) {
           console.log("Error -> " + e);
         });
   }
 
+  
   createEditModalView() {
     let options: ModalDialogOptions = {
       viewContainerRef: this.vcRef,
@@ -137,22 +133,14 @@ export class PlantProfileComponent implements OnInit {
     this.modalService.showModal(EditProfileModalComponent, options)
       .then(result => {
         if(result) {
-          console.log(result);
-          this.plants.filter((plant) => {
-            if(plant.name === this.plant.name) {
-              let indexToReplace = this.plants.indexOf(plant);
-              plant.name = result.newName;
-              if(result.updatedPlantedDate) {
-                plant.datePlanted = result.updatedPlantedDate;
-              }
-              if(result.updatedHarvestDate) {
-                plant.dateHarvest = result.updatedHarvestDate;
-              }
-              this.plants[indexToReplace] = plant;
-              this.plant = plant
-              this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
-            }
-           });
+          this.plant.name = result.newName;
+          if(result.updatedPlantedDate) {
+            this.plant.datePlanted = result.updatedPlantedDate;
+          }
+          if(result.updatedHarvestDate) {
+            this.plant.dateHarvest = result.updatedHarvestDate;
+          }
+          this.couchbaseservice.updatePlant(this.id, this.plant);
         }
         else {
           console.log("Result undefined");
@@ -161,6 +149,7 @@ export class PlantProfileComponent implements OnInit {
       });
   }
 
+  
   createImageGaleryModalView() {
     let options: ModalDialogOptions = {
       viewContainerRef: this.vcRef,
@@ -170,36 +159,18 @@ export class PlantProfileComponent implements OnInit {
 
     this.modalService.showModal(ImageGaleryModalComponent, options)
       .then(newImageGalery => {
-        if(newImageGalery.updated) {
-          this.plants.filter((plant) => {
-            if(plant.name === this.plant.name) {
-              let indexToReplace = this.plants.indexOf(plant);
-              plant.imageGalery = newImageGalery.images;
-              this.plants[indexToReplace] = plant;
-              this.plant = plant
-              this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
-            }
-          })
-        }
-      })
+        this.plant.imageGalery = newImageGalery.images;
+        this.couchbaseservice.updatePlant(this.id, this.plant);
+      });
   }
 
   updateLastWaterDate() {
     let newDate = new Date();
-    
-    this.plants.filter((plant) => {
-     if(plant.name === this.plant.name) {
-       let indexToReplace = this.plants.indexOf(plant);
-       plant.lastWaterDate = newDate.toISOString();
-       this.plants[indexToReplace] = plant;
-       this.plant = plant
-       this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
-       //console.log(plant);
-       //console.log(this.plants);
-     }
-    });
+    this.plant.lastWaterDate = newDate.toISOString();
+    this.couchbaseservice.updatePlant(this.id, this.plant);
   }
 
+  
   addNote(args:EventData) {
     let label: Label = <Label>args.object;
     let page: Page = <Page>label.page;
@@ -220,16 +191,8 @@ export class PlantProfileComponent implements OnInit {
       utils.ad.dismissSoftInput();
     }
 
-    this.plants.filter((plant) => {
-      if(plant.name === this.plant.name) {
-        let indexToReplace = this.plants.indexOf(plant);
-        plant.notes = textview.text;
-        this.plants[indexToReplace] = plant;
-        this.plant = plant
-        this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
-      }
-      console.log(plant);
-    });
+    this.plant.notes = textview.text;
+    this.couchbaseservice.updatePlant(this.id, this.plant);
   }
 
   goBack(): void {

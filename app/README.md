@@ -1,25 +1,18 @@
-# NativeScript Angular Template
+# GreenPatch
 
-This template creates a "Hello, world" NativeScript app using TypeScript and Angular.
+**Development project using Nativescript + Angular and Couchbase Lite.**
 
-You can create a new app that uses this template with either the `--template` option.
+GreenPatch is an Android app that helps the user documentate the growth of their plants/crops.
+It features 'plant profiles' where you can add a profile picture, set dates for when you have planted and when you expect to harvest, add notes and an image galery.
 
-```
-tns create my-app-name --template tns-template-hello-world-ng
-```
+The data is saved locally using Couchbase Lite.
 
-Or the `--ng` shorthand.
+**Screenshots:**
 
-```
-tns create my-app-name --ng
-```
+![Home view](https://github.com/nachC/greenpatch/blob/master/screenshots/home.jpg)
+![Profile view](https://github.com/nachC/greenpatch/blob/master/screenshots/profile.jpg)
 
-> Note: Both commands will create a new NativeScript app that uses the latest version of this template published to [npm] (https://www.npmjs.com/package/tns-template-hello-world-ng).
 
-If you want to create a new app that uses the source of the template from the `master` branch, you can execute the following:
 
-```
-tns create my-app-name --template https://github.com/NativeScript/template-hello-world-ng.git#master
-```
 
-**NB:** Please, have in mind that the master branch may refer to dependencies that are not on NPM yet!
+Development state.

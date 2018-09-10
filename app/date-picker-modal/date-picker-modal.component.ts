@@ -38,11 +38,7 @@ export class DatePickerModalComponent implements OnInit {
 
   public onSubmit() {
     let selectedDate = this.datePicker.date;
-
-    let date = new Date(selectedDate.getFullYear(),
-                                 selectedDate.getMonth(),
-                                 selectedDate.getDate());
-
+    let date = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
     this.params.closeCallback(date.toISOString());
   }
 

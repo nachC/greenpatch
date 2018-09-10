@@ -3,7 +3,7 @@ import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 import { action } from 'ui/dialogs';
 import * as camera from 'nativescript-camera';
 import * as imagepicker from 'nativescript-imagepicker';
-import { Image } from 'tns-core-modules/ui/image/image';
+//import { Image } from 'tns-core-modules/ui/image/image';
 import { SwipeGestureEventData } from '../../node_modules/tns-core-modules/ui/gestures/gestures';
 
 @Component({
@@ -22,15 +22,11 @@ export class ImageGaleryModalComponent implements OnInit {
   constructor(private params: ModalDialogParams) {
     this.images = params.context;
     this.activeImage = this.images[0];
-    console.log(this.images.length);
   }
 
   ngOnInit() { }
 
   onSwipe(args: SwipeGestureEventData) {
-    console.log("Swipe Direction: " + args.direction);
-    console.log("images array size: " + this.images.length);
-    console.log("current index before update: " + this.currentIndex);
     //if swipe right
     if(args.direction == 1) {
       this.currentIndex--;
@@ -47,8 +43,6 @@ export class ImageGaleryModalComponent implements OnInit {
       }
       this.activeImage = this.images[this.currentIndex]
     }
-    console.log("current index after update: " + this.currentIndex);
-
   } 
 
   openActions() {

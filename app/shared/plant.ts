@@ -1,4 +1,5 @@
 export class Plant {
+    id: string;
     name: string;
     frontpageImage: string;
     imageGalery: Array<string>;

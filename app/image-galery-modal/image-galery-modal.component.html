@@ -1,9 +1,9 @@
-  <StackLayout>
+  <StackLayout (swipe)="onSwipe($event)">
     <StackLayout class="header" orientation="horizontal" horizontalAlignment="center">
       <Button class="btn btn-active green-accent" (tap)="submit()" text="GO BACK"></Button>
       <Button class="btn btn-active green-accent" (tap)="openActions()" text="ADD IMAGES"></Button>
     </StackLayout>
-    <StackLayout class="galery" (swipe)="onSwipe($event)">
-      <Image class="image" stretch="aspectFill" [src]="activeImage"></Image>
+    <StackLayout class="galery">
+      <Image class="image" stretch="aspectFit" [src]="activeImage"></Image>
     </StackLayout>
   </StackLayout>

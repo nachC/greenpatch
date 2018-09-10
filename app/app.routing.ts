@@ -10,7 +10,7 @@ const routes: Routes = [
     { path: "", redirectTo: "/home", pathMatch: "full" },
     { path: "home", component: HomeComponent },
     { path: "add-plant", component: AddPlantComponent },
-    { path: "plant-profile", component: PlantProfileComponent}
+    { path: "plant-profile/:id", component: PlantProfileComponent}
 ];
 
 @NgModule({

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Plant } from '../shared/plant';
 import { CouchbaseService } from "../services/couchbase.service";
-import { DataParams } from '../services/data-params';
 import { RouterExtensions } from "nativescript-angular/router";
 import { PlatformLocation } from '@angular/common';
 import { confirm } from "ui/dialogs";
@@ -17,47 +16,35 @@ export class HomeComponent implements OnInit {
   plants: Plant[] = [];
   numberOfPlants: number;
   zeroPlants: boolean;
+  documents = [];
 
   constructor(private couchbaseservice: CouchbaseService,
-              private dataParams: DataParams,
               private routerExtensions: RouterExtensions,
               private location : PlatformLocation) {
 
-    let doc = this.couchbaseservice.getDocument('plants');
-    if(doc == null) {
-      console.log("No plants in db");
-      this.numberOfPlants = 0;
-    }
-    else {
-      this.plants = doc.plants;
-      this.numberOfPlants = this.plants.length;
-    }
+              this.documents = this.couchbaseservice.getAllPlants();
+              this.updateNumberOfPlants();
+              console.log(this.documents);
   }
 
   ngOnInit() {
     this.location.onPopState(() => {
-      let doc = this.couchbaseservice.getDocument('plants');
-      if(doc == null) {
-        console.log("No plants in db");
-        this.numberOfPlants = 0;
-      }
-      else {
-        console.log("document: ");
-        console.log(doc);
-        this.plants = doc.plants;
-        this.numberOfPlants = this.plants.length;
-      }
+      this.documents = this.couchbaseservice.getAllPlants();
+      this.updateNumberOfPlants();
     });
-    
-    if(this.numberOfPlants == 0) {
+  }
+
+  updateNumberOfPlants() {
+    if(this.documents.length == 0) {
+      console.log("No plants in db");
       this.zeroPlants = true;
     }
-    else if(this.numberOfPlants != 0) {
+    else {
       this.zeroPlants = false;
     }
   }
 
-  confirmDelete(obj: Plant) {
+  deletePlant(id: string) {
     let options = {
       title: "Delete",
       message: "Are you sure you want to delete this plant?",
@@ -67,27 +54,15 @@ export class HomeComponent implements OnInit {
   
     confirm(options).then((result: boolean) => {
         if(result) {
-          this.deletePlant(obj);
+          this.couchbaseservice.deletePlant(id);
+          this.documents = this.couchbaseservice.getAllPlants();
+          this.updateNumberOfPlants();
         }
     });
   }
 
-  deletePlant(obj: Plant) {
-    let indexToDelete = this.plants.indexOf(obj);
-    this.plants.splice(indexToDelete, 1);
-    this.couchbaseservice.updateDocument('plants', {"plants": this.plants});
-    this.numberOfPlants = this.plants.length;
-    if(this.numberOfPlants == 0) {
-      this.zeroPlants = true;
-    }
-    else if(this.numberOfPlants != 0) {
-      this.zeroPlants = false;
-    }
-  }
-
-  selectPlant(obj: Plant) {
-    this.dataParams.storage = obj;
-    this.routerExtensions.navigate(['/plant-profile']);
+  selectPlant(id: string) {
+    this.routerExtensions.navigate(['/plant-profile', id]);
   }
 
 }
